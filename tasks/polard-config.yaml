@@ -1,0 +1,54 @@
+---
+- name: Create root directory
+  file: 
+    path: "{{ beranode_rootdir }}"
+    state: directory
+    mode: 0750
+    owner: "{{ beranode_user_id }}"
+    group: "{{ beranode_user_id }}"
+  become: true 
+
+- name: Create config directory
+  file: 
+    path: "{{ beranode_rootdir }}/config"
+    state: directory
+    mode: 0750
+    owner: "{{ beranode_user_id }}"
+    group: "{{ beranode_user_id }}"
+  become: true 
+
+- name: Stage config.toml
+  template:
+    src: config.toml.j2
+    dest: "{{ beranode_rootdir }}/config/config.toml"
+    mode: 0644
+    owner: "{{ beranode_user_id }}"
+    group: "{{ beranode_user_id }}"
+  become: true
+
+- name: Stage app.toml 
+  template:
+    src: app.toml.j2
+    dest: "{{ beranode_rootdir }}/config/app.toml"
+    mode: 0644
+    owner: "{{ beranode_user_id }}"
+    group: "{{ beranode_user_id }}"
+  become: true 
+
+- name: Stage client.toml 
+  template:
+    src: client.toml.j2
+    dest: "{{ beranode_rootdir }}/config/client.toml"
+    mode: 0644
+    owner: "{{ beranode_user_id }}"
+    group: "{{ beranode_user_id }}"
+  become: true 
+
+- name: Install polard service file 
+  template:
+    src: polard.service.j2
+    dest: "{{ beranode_systemd_dir }}/polard.service" 
+    owner: root
+    group: root 
+    mode: 0755
+  become: true   

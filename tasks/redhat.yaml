@@ -1,0 +1,18 @@
+---
+- block: 
+  - name: yum update 
+    yum: 
+      update_cache: true 
+      name: "*"
+      state: latest 
+
+  - name: Determine if reboot is required
+    shell: needs-restarting -r 
+    register: reboot_required 
+    ignore_errors: true 
+    failed_when: false 
+    changed_when: reboot_required.rc != 0
+    notify: reboot 
+    tags: ['never', 'reboot']
+  become: true
+  

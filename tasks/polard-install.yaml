@@ -1,0 +1,9 @@
+---
+- name: Install polard 
+  copy:
+    src: bin/polard 
+    dest: "{{ beranode_bin_dir }}/polard"
+    owner: "{{ beranode_user_id }}"
+    group: "{{ beranode_user_id }}"
+    mode: 0750
+  become: true 

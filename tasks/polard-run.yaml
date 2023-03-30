@@ -1,0 +1,8 @@
+--- 
+- name: Start polard service
+  systemd: 
+    name: polard 
+    state: restarted
+    enabled: true 
+    daemon_reload: true 
+  become: true 

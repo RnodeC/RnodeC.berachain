@@ -1,0 +1,16 @@
+[Unit]
+Description=Polard Daemon
+After=network.target
+
+[Service]
+Type=simple
+User={{ beranode_user_name }}
+ExecStart=polard start --home {{ beranode_rootdir }}
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+LimitNOFILE=65535
