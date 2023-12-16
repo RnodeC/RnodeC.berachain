@@ -1,7 +1,7 @@
 RnodeC.beranode
 =========
 
-This role will deploy a berachain node.  
+This role will deploy a berachain node.
 
 **This is just a placeholder, will not work until we have a testnet**
 
@@ -18,7 +18,7 @@ No variables are required for this role.  See `defaults/main.yaml` for full list
 ```
 beranode_moniker: <your nodes name>
 ```
- 
+
 
 Example Playbook
 ----------------
@@ -31,8 +31,6 @@ Example Playbook
   roles:
   - role: RnodeC.beranode
 ```
-
-
 
 Author Information
 ------------------

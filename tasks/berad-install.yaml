@@ -1,0 +1,9 @@
+---
+- name: Install berad
+  copy:
+    src: bin/berad
+    dest: "{{ beranode_bin_dir }}/berad"
+    owner: "{{ beranode_user_id }}"
+    group: "{{ beranode_user_id }}"
+    mode: 0750
+  become: true

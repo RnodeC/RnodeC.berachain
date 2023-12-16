@@ -1,13 +1,12 @@
 ---
-- name: OS specific config 
+- name: OS specific config
   include_tasks: "{{ ansible_os_family | lower }}.yaml"
-  tags: os 
-  
-- name: Common config 
-  include_tasks: common.yaml 
+  tags: os
 
-- include_tasks: polard-install.yaml
+- include_tasks: common.yaml
 
-- include_tasks: polard-config.yaml
+- include_tasks: berad-install.yaml
 
-- include_tasks: polard-run.yaml
+- include_tasks: berad-config.yaml
+
+- include_tasks: berad-run.yaml

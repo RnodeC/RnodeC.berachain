@@ -1,11 +1,11 @@
 [Unit]
-Description=Polard Daemon
+Description=berad daemon
 After=network.target
 
 [Service]
 Type=simple
 User={{ beranode_user_name }}
-ExecStart=polard start --home {{ beranode_rootdir }}
+ExecStart=berad start --home {{ beranode_rootdir }}
 Restart=on-failure
 RestartSec=5s
 

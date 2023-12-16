@@ -1,0 +1,8 @@
+---
+- name: Start berad service
+  systemd:
+    name: berad
+    state: restarted
+    enabled: true
+    daemon_reload: true
+  become: true
