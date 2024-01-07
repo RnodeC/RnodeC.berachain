@@ -1,54 +1,91 @@
 ---
-- name: Create root directory
-  file:
-    path: "{{ beranode_rootdir }}"
-    state: directory
-    mode: 0750
-    owner: "{{ beranode_user_id }}"
-    group: "{{ beranode_user_id }}"
+- block:
+  - name: Create root directory
+    file:
+      path: "{{ beranode_rootdir }}"
+      state: directory
+      mode: 0750
+      owner: "{{ beranode_user_id }}"
+      group: "{{ beranode_user_id }}"
+
+  - name: Create config directory
+    file:
+      path: "{{ beranode_rootdir }}/config"
+      state: directory
+      mode: 0750
+      owner: "{{ beranode_user_id }}"
+      group: "{{ beranode_user_id }}"
+
+  - name: Stage config.toml
+    template:
+      src: config.toml.j2
+      dest: "{{ beranode_rootdir }}/config/config.toml"
+      mode: 0644
+      owner: "{{ beranode_user_id }}"
+      group: "{{ beranode_user_id }}"
+
+  - name: Stage app.toml
+    template:
+      src: app.toml.j2
+      dest: "{{ beranode_rootdir }}/config/app.toml"
+      mode: 0644
+      owner: "{{ beranode_user_id }}"
+      group: "{{ beranode_user_id }}"
+
+  - name: Stage client.toml
+    template:
+      src: client.toml.j2
+      dest: "{{ beranode_rootdir }}/config/client.toml"
+      mode: 0644
+      owner: "{{ beranode_user_id }}"
+      group: "{{ beranode_user_id }}"
+
+  - name: Get genesis.json
+    get_url:
+      url: "{{ beranode_genesis_url }}"
+      dest: "{{ beranode_rootdir }}/config/genesis.json"
+      mode: 0644
+      owner: "{{ beranode_user_id }}"
+      group: "{{ beranode_user_id }}"
+
+  - name: Install berad service file
+    template:
+      src: berad.service.j2
+      dest: "{{ beranode_systemd_dir }}/berad.service"
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Check if beranode_node_key is provided
+    set_fact:
+      node_key_provided: "{{ beranode_node_key is defined and beranode_node_key != '' }}"
+    no_log: true
+
+  - name: Stage node_key.json from template
+    template:
+      src: node_key.json.j2
+      dest: "{{ beranode_rootdir }}/config/node_key.json"
+      mode: 0600
+      owner: "{{ beranode_user_id }}"
+      group: "{{ beranode_user_id }}"
+    when: node_key_provided
+    no_log: true
+
+  - name: Generate node_key.json
+    command: "berad generate-key --output {{ beranode_rootdir }}/config/node_key.json"
+    when: not node_key_provided
+    become: true
+    no_log: true
   become: true
 
-- name: Create config directory
-  file:
-    path: "{{ beranode_rootdir }}/config"
-    state: directory
-    mode: 0750
-    owner: "{{ beranode_user_id }}"
-    group: "{{ beranode_user_id }}"
-  become: true
-
-- name: Stage config.toml
-  template:
-    src: config.toml.j2
-    dest: "{{ beranode_rootdir }}/config/config.toml"
-    mode: 0644
-    owner: "{{ beranode_user_id }}"
-    group: "{{ beranode_user_id }}"
-  become: true
-
-- name: Stage app.toml
-  template:
-    src: app.toml.j2
-    dest: "{{ beranode_rootdir }}/config/app.toml"
-    mode: 0644
-    owner: "{{ beranode_user_id }}"
-    group: "{{ beranode_user_id }}"
-  become: true
-
-- name: Stage client.toml
-  template:
-    src: client.toml.j2
-    dest: "{{ beranode_rootdir }}/config/client.toml"
-    mode: 0644
-    owner: "{{ beranode_user_id }}"
-    group: "{{ beranode_user_id }}"
-  become: true
-
-- name: Install berad service file
-  template:
-    src: berad.service.j2
-    dest: "{{ beranode_systemd_dir }}/berad.service"
-    owner: root
-    group: root
-    mode: 0755
+- block:
+  - name: Stage priv_validator_key.json
+    template:
+      src: priv_validator_key.json.j2
+      dest: "{{ beranode_rootdir }}/config/priv_validator_key.json"
+      mode: 0600
+      owner: "{{ beranode_user_id }}"
+      group: "{{ beranode_user_id }}"
+    no_log: true
+  when: beranode_role is 'validator'
   become: true

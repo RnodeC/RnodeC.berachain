@@ -1,7 +1,42 @@
 ---
-beranode_moniker: beranode 
-beranode_chain_id: polaris-2061
-beranode_user_name: bera 
+# General beranode vars
+beranode_role: validator # full|validator|rpc|archive|sentry
+beranode_chain_id: artio-80085
+beranode_pruning_mode: default # default|everything|nothing
+beranode_seeds: "" # comma separated list of seed nodes to connect to
+beranode_p2p_listen_address: '0.0.0.0'
+beranode_p2p_port: 26656
+beranode_seed_mode_enabled: false
+beranode_state_sync_enabled: false
+beranode_state_sync_rpc_servers: "" # comma separated list of trusted rpc servers to use for sync
+beranode_grpc_enabled: true
+beranode_grpc_listen_address: '127.0.0.1'
+beranode_grpc_port: 9090
+
+# If validator, these are required
+validator_address:
+validator_pub_key:
+validator_key:
+node_private_key:
+
+# If validator or sentry, these are relevant
+beranode_persistent_peers: "" # comma separated list of nodes to keep persistent connections to
+beranode_private_peer_ids: "" # comma separated list of peer IDs to keep private (will not be gossiped to other peers)
+beranode_pex_enabled: true
+
+# If rpc node (or if rpc is enabled), these are relevant
+beranode_rpc_listen_address: '127.0.0.1' # defaults to '0.0.0.0' when beranode_role is rpc, localhost otherwise
+beranode_rpc_port: 8545
+beranode_rpc_cors_allowed_origins: '[]' # defaults to '[*]' when beranode_role is rpc
+beranode_max_inbound_peers: 40
+beranode_max_outbound_peers: 10
+beranode_api_server_enabled: false # defaults to true when beranode_role is rpc
+beranode_api_listen_address: '127.0.0.1'
+beranode_api_port: 1317
+beranode_api_unsafe_cors_enabled: false
+
+# os vars
+beranode_user_name: bera
 beranode_user_id: 4420
 beranode_min_gas_prices: '0abera'
 beranode_db_backend: goleveldb
@@ -9,27 +44,8 @@ beranode_telemetry_enabled: false
 beranode_rootdir: /berachain
 beranode_systemd_dir: /etc/systemd/system
 beranode_bin_dir: /usr/local/bin
+beranode_genesis_url: https://raw.githubusercontent.com/berachain/node-config/main/networks/closed-testnet/genesis/genesis.json
+beranode_bin_url: https://github.com/berachain/berachain/releases
 
-beranode_persistent_peers: "" # Comma separated list of nodes to keep persistent connections to 
-beranode_seeds: "" # Comma separated list of seed nodes to connect to
-beranode_private_peer_ids: "" # Comma separated list of peer IDs to keep private (will not be gossiped to other peers)
-beranode_max_num_inbound_peers: 40
-beranode_max_num_outbound_peers: 10
-beranode_pex_enable: true
-beranode_seed_mode_enable: false
-beranode_statesync_enable: false 
-
-beranode_p2p_listen_address: '0.0.0.0'
-beranode_p2p_port: 26656
-
-beranode_rpc_listen_address: localhost
-beranode_rpc_port: 26657
-
-beranode_api_server_enabled: true 
-beranode_api_listen_address: localhost
-beranode_api_port: 1317
-beranode_api_unsafe_cors_enabled: false 
-
-beranode_grpc_enabled: true
-beranode_grpc_listen_address: localhost
-beranode_grpc_port: 9090
+# polaris vars
+beranode_polaris_chain_id: '80085'
