@@ -1,9 +1,9 @@
 ---
 - name: Install some useful packages
-  package: 
+  package:
     name: "{{ item }}"
     state: latest
-  become: true  
+  become: true
   with_items:
   - git
   - wget
@@ -14,9 +14,9 @@
   - tmux
 
 - name: Add bera user
-  user: 
-    name: "{{ beranode_user_name }}"
-    uid: "{{ beranode_user_id }}"
-    system: true 
+  user:
+    name: "{{ berachain_user_name }}"
+    uid: "{{ berachain_user_id }}"
+    system: true
     shell: /bin/false
-  become: true 
+  become: true

@@ -6,12 +6,12 @@
 ###############################################################################
 
 # The network chain ID
-chain-id = "{{ beranode_chain_id }}"
+chain-id = "{{ berachain_chain_id }}"
 # The keyring's backend, where the keys are stored (os|file|kwallet|pass|test|memory)
-keyring-backend = "{{ beranode_keyring_backend }}"
+keyring-backend = "{{ berachain_keyring_backend }}"
 # CLI output format (text|json)
 output = "text"
 # <host>:<port> to CometBFT RPC interface for this chain
-node = "tcp://localhost:{{ beranode_rpc_port }}"
+node = "tcp://localhost:{{ berachain_rpc_port }}"
 # Transaction broadcasting mode (sync|async)
 broadcast-mode = "sync"

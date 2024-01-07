@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-User={{ beranode_user_name }}
-ExecStart=berad start --home {{ beranode_rootdir }}
+User={{ berachain_user_name }}
+ExecStart=berad start --home {{ berachain_rootdir }}
 Restart=on-failure
 RestartSec=5s
 

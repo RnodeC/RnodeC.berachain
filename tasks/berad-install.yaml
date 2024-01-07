@@ -1,9 +1,9 @@
 ---
 - name: Download and Install berad
   get_url:
-    url: "{{ beranode_bin_url }}"
-    dest: "{{ beranode_bin_dir }}/berad"
-    owner: "{{ beranode_user_id }}"
-    group: "{{ beranode_user_id }}"
+    url: "{{ berachain_bin_url }}"
+    dest: "{{ berachain_bin_dir }}/berad"
+    owner: "{{ berachain_user_id }}"
+    group: "{{ berachain_user_id }}"
     mode: '0750'
   become: true

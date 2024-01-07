@@ -14,10 +14,10 @@ minimum-gas-prices = "0b/0x5806E416dA447b267cEA759358cF22Cc41FAE80F"
 # If this is set to zero, the query can consume an unbounded amount of gas.
 query-gas-limit = "0"
 
-{% if beranode_role == 'archive' %}
+{% if berachain_role == 'archive' %}
     {% set pruning_value = 'nothing' %}
 {% else %}
-    {% set pruning_value = beranode_pruning_mode %}
+    {% set pruning_value = berachain_pruning_mode %}
 {% endif %}
 
 # default: the last 362880 states are kept, pruning at 10 block intervals
@@ -123,7 +123,7 @@ statsd-addr = "k8s-default-datadogs-9c5aa361e5-7a6e95aaf29c644d.elb.ca-central-1
 
 # DatadogHostname defines the hostname to use when emitting metrics to
 # Datadog. Only utilized if MetricsSink is set to "dogstatsd".
-datadog-hostname = "{{ beranode_moniker }}"
+datadog-hostname = "{{ berachain_moniker }}"
 
 
 ###############################################################################
@@ -132,15 +132,15 @@ datadog-hostname = "{{ beranode_moniker }}"
 
 [api]
 
-{% if beranode_api_server_enabled %}
+{% if berachain_api_server_enabled %}
     {% set api_enabled = true %}
-    {% set api_listen_address = {{ beranode_api_listen_address}} %}
-{% elif beranode_role == 'rpc' %}
+    {% set api_listen_address = {{ berachain_api_listen_address}} %}
+{% elif berachain_role == 'rpc' %}
     {% set api_enabled = true %}
     {% set api_listen_address = '0.0.0.0' %}
 {% else %}
     {% set api_enabled = false %}
-    {% set api_listen_address = {{ beranode_api_listen_address}} %}
+    {% set api_listen_address = {{ berachain_api_listen_address}} %}
 {% endif %}
 
 # Enable defines if the API server should be enabled.
@@ -150,7 +150,7 @@ enable = {{ api_enabled }}
 swagger = {{ api_enabled }}
 
 # Address defines the API server to listen on.
-address = "tcp://{{ api_listen_address }}:{{ beranode_api_port }}"
+address = "tcp://{{ api_listen_address }}:{{ berachain_api_port }}"
 
 
 # MaxOpenConnections defines the number of maximum open connections.
@@ -166,7 +166,7 @@ rpc-write-timeout = 0
 rpc-max-body-bytes = 1000000
 
 # EnableUnsafeCORS defines if CORS should be enabled (unsafe - use it at your own risk).
-enabled-unsafe-cors = {{ beranode_api_unsafe_cors_enabled }}
+enabled-unsafe-cors = {{ berachain_api_unsafe_cors_enabled }}
 
 ###############################################################################
 ###                           gRPC Configuration                            ###
@@ -175,10 +175,10 @@ enabled-unsafe-cors = {{ beranode_api_unsafe_cors_enabled }}
 [grpc]
 
 # Enable defines if the gRPC server should be enabled.
-enable = {{ beranode_grpc_enabled }}
+enable = {{ berachain_grpc_enabled }}
 
 # Address defines the gRPC server address to bind to.
-address = "{{ beranode_grpc_listen_address }}:{{ beranode_grpc_port }}"
+address = "{{ berachain_grpc_listen_address }}:{{ berachain_grpc_port }}"
 
 # MaxRecvMsgSize defines the max message size in bytes the server can receive.
 # The default value is 10MB.
@@ -197,7 +197,7 @@ max-send-msg-size = "2147483647"
 # GRPCWebEnable defines if the gRPC-web should be enabled.
 # NOTE: gRPC must also be enabled, otherwise, this configuration is a no-op.
 # NOTE: gRPC-Web uses the same address as the API server.
-enable = {{ beranode_grpc_enabled }}
+enable = {{ berachain_grpc_enabled }}
 
 ###############################################################################
 ###                        State Sync Configuration                         ###
@@ -272,7 +272,7 @@ rpc-tx-fee-cap = "1"
 
 # Chain config
 [polaris.polar.chain]
-chain-id = "{{ beranode_polaris_chain_id }}"
+chain-id = "{{ berachain_polaris_chain_id }}"
 
 # Homestead switch block
 homestead-block = "0"

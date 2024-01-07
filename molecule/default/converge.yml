@@ -2,4 +2,4 @@
 - name: Converge
   hosts: instance
   roles:
-  - role: RnodeC.beranode
+  - role: RnodeC.berachain

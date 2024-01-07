@@ -1,11 +1,11 @@
 galaxy_info:
-  role_name: beranode
+  role_name: berachain
   author: RnodeC
-  description: deploy berachain node.  linux amd64 only. 
+  description: deploy berachain node.  linux amd64 only.
   license: "license (BSD, MIT)"
 
   min_ansible_version: 2.11
-  galaxy_tags: 
+  galaxy_tags:
   - berachain
 
 dependencies: []

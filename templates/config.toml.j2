@@ -19,7 +19,7 @@ version = "0.38.0"
 proxy_app = "tcp://127.0.0.1:26658"
 
 # A custom human readable name for this node
-moniker = "{{ beranode_moniker }}"
+moniker = "{{ berachain_moniker }}"
 
 # Database backend: goleveldb | cleveldb | boltdb | rocksdb | badgerdb
 # * goleveldb (github.com/syndtr/goleveldb - most popular implementation)
@@ -40,10 +40,10 @@ moniker = "{{ beranode_moniker }}"
 # * badgerdb (uses github.com/dgraph-io/badger)
 #   - EXPERIMENTAL
 #   - use badgerdb build tag (go build -tags badgerdb)
-db_backend = "{{ beranode_db_backend }}"
+db_backend = "{{ berachain_db_backend }}"
 
 # Database directory
-db_dir = "{{ beranode_rootdir }}"
+db_dir = "{{ berachain_rootdir }}"
 
 # Output level for logging, including package level options
 log_level = "info"
@@ -86,16 +86,16 @@ filter_peers = false
 #######################################################
 [rpc]
 
-{% if beranode_role == 'rpc' %}
+{% if berachain_role == 'rpc' %}
     {% set rpc_listen_address = '0.0.0.0' %}
     {% set cors_origins = '["*"]' %}
 {% else %}
-    {% set rpc_listen_address = beranode_rpc_listen_address %}
-    {% set cors_origins = beranode_rpc_cors_allowed_origins %}
+    {% set rpc_listen_address = berachain_rpc_listen_address %}
+    {% set cors_origins = berachain_rpc_cors_allowed_origins %}
 {% endif %}
 
 # TCP or UNIX socket address for the RPC server to listen on
-laddr = "tcp://{{ rpc_listen_address }}:{{ beranode_rpc_port }}"
+laddr = "tcp://{{ rpc_listen_address }}:{{ berachain_rpc_port }}"
 
 # A list of origins a cross-domain request can be executed from
 # Default value '[]' disables cors support
@@ -206,7 +206,7 @@ pprof_laddr = "localhost:6060"
 [p2p]
 
 # Address to listen for incoming connections
-laddr = "tcp://{{ beranode_p2p_listen_address }}:{{ beranode_p2p_port }}"
+laddr = "tcp://{{ berachain_p2p_listen_address }}:{{ berachain_p2p_port }}"
 
 # Address to advertise to peers for them to dial. If empty, will use the same
 # port as the laddr, and will introspect on the listener to figure out the
@@ -214,10 +214,10 @@ laddr = "tcp://{{ beranode_p2p_listen_address }}:{{ beranode_p2p_port }}"
 external_address = ""
 
 # Comma separated list of seed nodes to connect to
-seeds = "{{ beranode_seeds }}"
+seeds = "{{ berachain_seeds }}"
 
 # Comma separated list of nodes to keep persistent connections to
-persistent_peers = "{{ beranode_persistent_peers }}"
+persistent_peers = "{{ berachain_persistent_peers }}"
 
 # Path to address book
 addr_book_file = "config/addrbook.json"
@@ -227,10 +227,10 @@ addr_book_file = "config/addrbook.json"
 addr_book_strict = true
 
 # Maximum number of inbound peers
-max_num_inbound_peers = {{ beranode_max_inbound_peers }}
+max_num_inbound_peers = {{ berachain_max_inbound_peers }}
 
 # Maximum number of outbound peers to connect to, excluding persistent peers
-max_num_outbound_peers = {{ beranode_max_outbound_peers }}
+max_num_outbound_peers = {{ berachain_max_outbound_peers }}
 
 # List of node IDs, to which a connection will be (re)established ignoring any existing limits
 unconditional_peer_ids = ""
@@ -250,10 +250,10 @@ send_rate = 5120000
 # Rate at which packets can be received, in bytes/second
 recv_rate = 5120000
 
-{% if beranode_role == 'sentry' %}
+{% if berachain_role == 'sentry' %}
     {% set pex_value = true %}
 {% else %}
-    {% set pex_value = beranode_pex_enabled %}
+    {% set pex_value = berachain_pex_enabled %}
 {% endif %}
 
 # Set true to enable the peer-exchange reactor
@@ -263,10 +263,10 @@ pex = {{ pex_value }}
 # peers. If another node asks it for addresses, it responds and disconnects.
 #
 # Does not work if the peer-exchange reactor is disabled.
-seed_mode = {{ beranode_seed_mode_enabled }}
+seed_mode = {{ berachain_seed_mode_enabled }}
 
 # Comma separated list of peer IDs to keep private (will not be gossiped to other peers)
-private_peer_ids = "{{ beranode_private_peer_ids }}"
+private_peer_ids = "{{ berachain_private_peer_ids }}"
 
 # Toggle to disable guard against peers connecting from the same ip.
 allow_duplicate_ip = false
@@ -334,7 +334,7 @@ max_batch_bytes = 0
 # the network to take and serve state machine snapshots. State sync is not attempted if the node
 # has any local state (LastBlockHeight > 0). The node will have a truncated block history,
 # starting from the height of the snapshot.
-enable = {{ beranode_state_sync_enabled }}
+enable = {{ berachain_state_sync_enabled }}
 
 # RPC servers (comma-separated) for light client verification of the synced state machine and
 # retrieval of state data for node bootstrapping. Also needs a trusted height and corresponding
@@ -342,7 +342,7 @@ enable = {{ beranode_state_sync_enabled }}
 #
 # For Cosmos SDK-based chains, trust_period should usually be about 2/3 of the unbonding time (~2
 # weeks) during which they can be financially punished (slashed) for misbehavior.
-rpc_servers = "{{ beranode_state_sync_rpc_servers }}"
+rpc_servers = "{{ berachain_state_sync_rpc_servers }}"
 trust_height = 0
 trust_hash = ""
 trust_period = "168h0m0s"

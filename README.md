@@ -1,4 +1,4 @@
-RnodeC.beranode
+RnodeC.berachain
 =========
 
 This role will deploy a berachain node.
@@ -13,13 +13,13 @@ Linux x86_64 host
 Role Variables
 --------------
 
-`beranode_role` group_var defined in the inventory determines the type of node this will be.  This must be full, rpc, validator, archive, or sentry.  defaults to full.
+`berachain_role` group_var defined in the inventory determines the type of node this will be.  This must be full, rpc, validator, archive, or sentry.  defaults to full.
 
 For a full, rpc, or archive node, no further variables are required.
 
 If this is a validator, you also must set these vars (obviously not a highly secure way of handling sensitive keys):
 ```bash
-beranode_moniker: # your validator's name
+berachain_moniker: # your validator's name
 validator_address: #
 validator_pub_key: # pub key from priv_validator_key.json
 validator_key: # private key from priv_validator_key.json
@@ -31,14 +31,14 @@ See [`defaults/main.yaml`](defaults/main.yaml) for full list of available variab
 
 Example Inventory
 ----------------
-This role depends upon the beranode_role group var that must be set in the inventory file to determine which type of node to deploy.  For example, to deploy a single rpc node:
+This role depends upon the berachain_role group var that must be set in the inventory file to determine which type of node to deploy.  For example, to deploy a single rpc node:
 
 ```bash
 [rpc_nodes]
 rpc1.example.com
 
 [rpc_nodes:vars]
-beranode_role=rpc
+berachain_role=rpc
 ```
 
 Or a validator node:
@@ -47,7 +47,7 @@ Or a validator node:
 validator1.example.com
 
 [validator_nodes:vars]
-beranode_role=validator
+berachain_role=validator
 ```
 
 Example Playbook
@@ -55,11 +55,11 @@ Example Playbook
 
 ```bash
 ---
-- name: Deploy beranode
+- name: Deploy berachain
   hosts: all
 
   roles:
-  - role: RnodeC.beranode
+  - role: RnodeC.berachain
 ```
 
 Author Information
