@@ -1,9 +1,18 @@
 ---
-- name: Download and Install berad
-  get_url:
-    url: "{{ berachain_bin_url }}"
+#- name: Download and Install berad
+#  get_url:
+#    url: "{{ berachain_bin_url }}"
+#    dest: "{{ berachain_bin_dir }}/berad"
+#    owner: "{{ berachain_user_name }}"
+#    group: "{{ berachain_group_name }}"
+#    mode: '0755'
+#  become: true
+
+- name: (temp) Install berad from local bin
+  copy:
+    src: "bin/berad"
     dest: "{{ berachain_bin_dir }}/berad"
-    owner: "{{ berachain_user_id }}"
-    group: "{{ berachain_user_id }}"
-    mode: '0750'
+    owner: "{{ berachain_user_name }}"
+    group: "{{ berachain_group_name }}"
+    mode: '0755'
   become: true

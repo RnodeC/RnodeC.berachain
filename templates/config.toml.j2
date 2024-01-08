@@ -43,7 +43,7 @@ moniker = "{{ berachain_moniker }}"
 db_backend = "{{ berachain_db_backend }}"
 
 # Database directory
-db_dir = "{{ berachain_rootdir }}"
+db_dir = "data"
 
 # Output level for logging, including package level options
 log_level = "info"
@@ -211,7 +211,7 @@ laddr = "tcp://{{ berachain_p2p_listen_address }}:{{ berachain_p2p_port }}"
 # Address to advertise to peers for them to dial. If empty, will use the same
 # port as the laddr, and will introspect on the listener to figure out the
 # address. IP and port are required. Example: 159.89.10.97:26656
-external_address = ""
+external_address = "tcp://{{ berachain_p2p_external_address }}:{{ berachain_p2p_port }}"
 
 # Comma separated list of seed nodes to connect to
 seeds = "{{ berachain_seeds }}"
@@ -251,19 +251,19 @@ send_rate = 5120000
 recv_rate = 5120000
 
 {% if berachain_role == 'sentry' %}
-    {% set pex_value = true %}
+    {% set pex_enabled = true %}
 {% else %}
-    {% set pex_value = berachain_pex_enabled %}
+    {% set pex_enabled = berachain_pex_enabled %}
 {% endif %}
 
 # Set true to enable the peer-exchange reactor
-pex = {{ pex_value }}
+pex = {{ pex_enabled | lower }}
 
 # Seed mode, in which node constantly crawls the network and looks for
 # peers. If another node asks it for addresses, it responds and disconnects.
 #
 # Does not work if the peer-exchange reactor is disabled.
-seed_mode = {{ berachain_seed_mode_enabled }}
+seed_mode = {{ berachain_seed_mode_enabled | lower }}
 
 # Comma separated list of peer IDs to keep private (will not be gossiped to other peers)
 private_peer_ids = "{{ berachain_private_peer_ids }}"
@@ -334,7 +334,7 @@ max_batch_bytes = 0
 # the network to take and serve state machine snapshots. State sync is not attempted if the node
 # has any local state (LastBlockHeight > 0). The node will have a truncated block history,
 # starting from the height of the snapshot.
-enable = {{ berachain_state_sync_enabled }}
+enable = {{ berachain_state_sync_enabled | lower }}
 
 # RPC servers (comma-separated) for light client verification of the synced state machine and
 # retrieval of state data for node bootstrapping. Also needs a trusted height and corresponding

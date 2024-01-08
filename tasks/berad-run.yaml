@@ -1,8 +1,18 @@
 ---
-- name: Start berad service
+- name: Restart berad service
   systemd:
     name: berad
     state: restarted
     enabled: true
     daemon_reload: true
   become: true
+
+- name: If not a validator, ensure priv_validator_key and state do not exist
+  when: (berachain_role != 'validator')
+  become: true
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ berachain_home_dir }}/config/priv_validator_key.json"
+    - "{{ berachain_home_dir }}/data/priv_validator_state.json"

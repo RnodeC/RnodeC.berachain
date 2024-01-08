@@ -5,12 +5,10 @@ After=network.target
 [Service]
 Type=simple
 User={{ berachain_user_name }}
-ExecStart=berad start --home {{ berachain_rootdir }}
+ExecStart={{ berachain_bin_dir }}/berad start --home {{ berachain_home_dir }}
 Restart=on-failure
 RestartSec=5s
+LimitNOFILE=65535
 
 [Install]
 WantedBy=multi-user.target
-
-[Service]
-LimitNOFILE=65535

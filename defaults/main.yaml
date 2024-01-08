@@ -1,32 +1,36 @@
 ---
+### See app.toml.j2, config.toml.j2, and/or client.toml.j2 for more details/comments around most of these vars
+
 # General berachain vars
-berachain_role: validator # full|validator|rpc|archive|sentry
-berachain_chain_id: artio-80085
+berachain_role: full # full|validator|rpc|archive|sentry
+berachain_chain_id: ''
+berachain_genesis_url: ''
+berachain_bin_url: ''
+berachain_keyring_backend: file
 berachain_pruning_mode: default # default|everything|nothing
-berachain_seeds: "" # comma separated list of seed nodes to connect to
-berachain_p2p_listen_address: '0.0.0.0'
+berachain_seeds: '' # comma separated list of seed nodes to connect to
+berachain_min_gas_prices: '0b/0x5806E416dA447b267cEA759358cF22Cc41FAE80F'
+berachain_db_backend: goleveldb
+berachain_telemetry_enabled: false
+berachain_dogstatsd_addr: ''
+berachain_p2p_listen_address: '0.0.0.0' # '0.0.0.0' binds the node to all available IP addresses of the machine, which is typically desired for ensuring the node is reachable on the network.
+berachain_p2p_external_address: '0.0.0.0' # external address advertised to peers for incoming connections. By default, if left empty (''), it uses berachain_p2p_listen_address. Set this variable if your node is behind a NAT, a VPN, or a proxy, and you need to advertise a different external address for peers to connect
 berachain_p2p_port: 26656
 berachain_seed_mode_enabled: false
 berachain_state_sync_enabled: false
-berachain_state_sync_rpc_servers: "" # comma separated list of trusted rpc servers to use for sync
+berachain_state_sync_rpc_servers: '' # comma separated list of trusted rpc servers to use for sync
 berachain_grpc_enabled: true
 berachain_grpc_listen_address: '127.0.0.1'
 berachain_grpc_port: 9090
 
-# If validator, these are required
-validator_address:
-validator_pub_key:
-validator_key:
-node_private_key:
-
 # If validator or sentry, these are relevant
-berachain_persistent_peers: "" # comma separated list of nodes to keep persistent connections to
-berachain_private_peer_ids: "" # comma separated list of peer IDs to keep private (will not be gossiped to other peers)
+berachain_persistent_peers: '' # comma separated list of nodes to keep persistent connections to
+berachain_private_peer_ids: '' # comma separated list of peer IDs to keep private (will not be gossiped to other peers)
 berachain_pex_enabled: true
 
-# If rpc node (or if rpc is enabled), these are relevant
+# rpc and api settings.  rpc is always enabled by default.
 berachain_rpc_listen_address: '127.0.0.1' # defaults to '0.0.0.0' when berachain_role is rpc, localhost otherwise
-berachain_rpc_port: 8545
+berachain_rpc_port: 26657
 berachain_rpc_cors_allowed_origins: '[]' # defaults to '[*]' when berachain_role is rpc
 berachain_max_inbound_peers: 40
 berachain_max_outbound_peers: 10
@@ -35,17 +39,14 @@ berachain_api_listen_address: '127.0.0.1'
 berachain_api_port: 1317
 berachain_api_unsafe_cors_enabled: false
 
+# polaris vars
+berachain_polaris_chain_id: ''
+berachain_polaris_rpc_listen_address: '127.0.0.1'
+berachain_polaris_rpc_port: 8545
+
 # os vars
-berachain_user_name: bera
-berachain_user_id: 4420
-berachain_min_gas_prices: '0abera'
-berachain_db_backend: goleveldb
-berachain_telemetry_enabled: false
-berachain_rootdir: /berachain
+berachain_user_name: root
+berachain_group_name: root
+berachain_home_dir: /root/.berad
 berachain_systemd_dir: /etc/systemd/system
 berachain_bin_dir: /usr/local/bin
-berachain_genesis_url: https://raw.githubusercontent.com/berachain/node-config/main/networks/closed-testnet/genesis/genesis.json
-berachain_bin_url: https://github.com/berachain/berachain/releases
-
-# polaris vars
-berachain_polaris_chain_id: '80085'

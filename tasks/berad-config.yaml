@@ -1,52 +1,97 @@
 ---
-- block:
-  - name: Create root directory
-    file:
-      path: "{{ berachain_rootdir }}"
-      state: directory
-      mode: 0750
-      owner: "{{ berachain_user_id }}"
-      group: "{{ berachain_user_id }}"
+- become: true
+  block:
+  - name: Check if config.toml exists
+    stat:
+      path: "{{ berachain_home_dir }}/config/config.toml"
+    register: config_toml_stat
 
-  - name: Create config directory
+  - name: Check if app.toml exists
+    stat:
+      path: "{{ berachain_home_dir }}/config/app.toml"
+    register: app_toml_stat
+
+  - name: Set fact for initialization requirement
+    set_fact:
+      require_init: "{{ not (config_toml_stat.stat.exists and app_toml_stat.stat.exists) }}"
+
+  - name: Create home directory
     file:
-      path: "{{ berachain_rootdir }}/config"
+      path: "{{ berachain_home_dir }}"
       state: directory
       mode: 0750
-      owner: "{{ berachain_user_id }}"
-      group: "{{ berachain_user_id }}"
+      owner: "{{ berachain_user_name }}"
+      group: "{{ berachain_group_name }}"
+
+  - name: If fresh node... Recover from mnemonic if provided
+    ansible.builtin.expect:
+      command: >
+        {{ berachain_bin_dir }}/berad init -o {{ berachain_moniker }}
+        --chain-id {{ berachain_chain_id }}
+        --home {{ berachain_home_dir }}
+        --recover
+      responses:
+        (?i)Enter your bip39 mnemonic: "{{ berachain_keys_mnemonic }}"
+      echo: yes
+    register: berad_init_output
+    when:
+    - berachain_keys_mnemonic is defined
+    - berachain_keys_mnemonic | length > 0
+    - require_init
+  - debug:
+      var: berad_init_output
+
+  - name: Otherwise, init regularly
+    command: >
+        {{ berachain_bin_dir }}/berad init -o {{ berachain_moniker }}
+        --chain-id {{ berachain_chain_id }}
+        --home {{ berachain_home_dir }}
+    register: berad_init_output
+    when:
+    - berachain_keys_mnemonic is not defined or berachain_keys_mnemonic | length == 0
+    - require_init
+  - debug:
+      var: berad_init_output
 
   - name: Stage config.toml
     template:
       src: config.toml.j2
-      dest: "{{ berachain_rootdir }}/config/config.toml"
+      dest: "{{ berachain_home_dir }}/config/config.toml"
       mode: 0644
-      owner: "{{ berachain_user_id }}"
-      group: "{{ berachain_user_id }}"
+      owner: "{{ berachain_user_name }}"
+      group: "{{ berachain_group_name }}"
 
   - name: Stage app.toml
     template:
       src: app.toml.j2
-      dest: "{{ berachain_rootdir }}/config/app.toml"
+      dest: "{{ berachain_home_dir }}/config/app.toml"
       mode: 0644
-      owner: "{{ berachain_user_id }}"
-      group: "{{ berachain_user_id }}"
+      owner: "{{ berachain_user_name }}"
+      group: "{{ berachain_group_name }}"
 
   - name: Stage client.toml
     template:
       src: client.toml.j2
-      dest: "{{ berachain_rootdir }}/config/client.toml"
+      dest: "{{ berachain_home_dir }}/config/client.toml"
       mode: 0644
-      owner: "{{ berachain_user_id }}"
-      group: "{{ berachain_user_id }}"
+      owner: "{{ berachain_user_name }}"
+      group: "{{ berachain_group_name }}"
 
-  - name: Get genesis.json
-    get_url:
-      url: "{{ berachain_genesis_url }}"
-      dest: "{{ berachain_rootdir }}/config/genesis.json"
+  #- name: Get genesis.json
+  #  get_url:
+  #    url: "{{ berachain_genesis_url }}"
+  #    dest: "{{ berachain_home_dir }}/config/genesis.json"
+  #    mode: 0644
+  #    owner: "{{ berachain_user_name }}"
+  #    group: "{{ berachain_group_name }}"
+
+  - name: (temp) Copy genesis.json
+    copy:
+      src: "files/genesis.json"
+      dest: "{{ berachain_home_dir }}/config/genesis.json"
       mode: 0644
-      owner: "{{ berachain_user_id }}"
-      group: "{{ berachain_user_id }}"
+      owner: "{{ berachain_user_name }}"
+      group: "{{ berachain_group_name }}"
 
   - name: Install berad service file
     template:
@@ -56,36 +101,44 @@
       group: root
       mode: 0755
 
-  - name: Check if berachain_node_key is provided
-    set_fact:
-      node_key_provided: "{{ berachain_node_key is defined and berachain_node_key != '' }}"
-    no_log: true
+  - name: Check if a local node_key.json file was provided
+    stat:
+      path: "{{ berachain_node_key_file }}"
+    register: local_node_key_file_stat
+    delegate_to: localhost
+    when: berachain_node_key_file is defined
 
-  - name: Stage node_key.json from template
-    template:
-      src: node_key.json.j2
-      dest: "{{ berachain_rootdir }}/config/node_key.json"
+  - name: Copy provided node_key.json to remote
+    copy:
+      src: "{{ berachain_node_key_file }}"
+      dest: "{{ berachain_home_dir }}/config/node_key.json"
       mode: 0600
-      owner: "{{ berachain_user_id }}"
-      group: "{{ berachain_user_id }}"
-    when: node_key_provided
-    no_log: true
+      owner: "{{ berachain_user_name }}"
+      group: "{{ berachain_group_name }}"
+      decrypt: "{{ 'yes' if local_node_key_file_stat.stat.isencrypted else 'no' }}"
+    when:
+    - berachain_node_key_file is defined
+    - local_node_key_file_stat.stat.exists
 
-  - name: Generate node_key.json
-    command: "berad generate-key --output {{ berachain_rootdir }}/config/node_key.json"
-    when: not node_key_provided
-    become: true
-    no_log: true
+- name: If validator, configure priv_validator_key.json
+  when: berachain_role == 'validator'
   become: true
+  block:
+  - name: Check if a local priv_validator_key.json file was provided
+    stat:
+      path: "{{ berachain_priv_validator_key_file }}"
+    register: local_priv_validator_key_file_stat
+    delegate_to: localhost
+    when: berachain_priv_validator_key_file is defined
 
-- block:
-  - name: Stage priv_validator_key.json
-    template:
-      src: priv_validator_key.json.j2
-      dest: "{{ berachain_rootdir }}/config/priv_validator_key.json"
+  - name: Copy provided priv_validator_key.json to remote
+    copy:
+      src: "{{ berachain_priv_validator_key_file }}"
+      dest: "{{ berachain_home_dir }}/config/priv_validator_key.json"
       mode: 0600
-      owner: "{{ berachain_user_id }}"
-      group: "{{ berachain_user_id }}"
-    no_log: true
-  when: berachain_role is 'validator'
-  become: true
+      owner: "{{ berachain_user_name }}"
+      group: "{{ berachain_group_name }}"
+      decrypt: "{{ 'yes' if local_priv_validator_key_file_stat.stat.isencrypted else 'no' }}"
+    when:
+    - berachain_priv_validator_key_file is defined
+    - local_priv_validator_key_file_stat.stat.exists

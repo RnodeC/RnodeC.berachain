@@ -1,18 +1,20 @@
 ---
-- block: 
-  - name: yum update 
-    yum: 
-      update_cache: true 
+- become: true
+  block:
+  - name: Ensure yum-utils is installed (for needs-restarting command)
+    yum:
+      name: yum-utils
+      state: present
+
+  - name: Perform a yum update
+    yum:
       name: "*"
-      state: latest 
+      state: latest
 
   - name: Determine if reboot is required
-    shell: needs-restarting -r 
-    register: reboot_required 
-    ignore_errors: true 
-    failed_when: false 
-    changed_when: reboot_required.rc != 0
-    notify: reboot 
-    tags: ['never', 'reboot']
-  become: true
-  
+    shell: needs-restarting -r
+    register: reboot_required
+    ignore_errors: true
+    changed_when: reboot_required.rc == 1
+    notify: reboot
+

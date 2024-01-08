@@ -1,16 +1,22 @@
 ---
-- block: 
-  - name: Update apt cache 
+- become: true
+  block:
+  - name: Update apt cache
     apt:
       update_cache: yes
       cache_valid_time: 3600
 
-  - name: Update all packages to their latest version
-    apt:
-      name: "*"
-      state: latest
-
   - name: Upgrade the OS (apt-get dist-upgrade)
     apt:
       upgrade: dist
-  become: true 
+
+  - name: Auto-remove unnecessary packages
+    apt:
+      autoremove: yes
+
+  - name: Check if a reboot is needed
+    stat:
+      path: /var/run/reboot-required
+    register: reboot_required
+    changed_when: reboot_required.stat.exists
+    notify: reboot

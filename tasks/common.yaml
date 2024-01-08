@@ -20,3 +20,6 @@
     system: true
     shell: /bin/false
   become: true
+  when: not berachain_user_name == 'root'
+  
+- meta: flush_handlers
