@@ -12,6 +12,8 @@ berachain_seeds: '' # comma separated list of seed nodes to connect to
 berachain_min_gas_prices: '0b/0x5806E416dA447b267cEA759358cF22Cc41FAE80F'
 berachain_db_backend: goleveldb
 berachain_telemetry_enabled: false
+berachain_prometheus_enabled: true
+berachain_prometheus_port: 26660
 berachain_dogstatsd_addr: ''
 berachain_p2p_listen_address: '0.0.0.0' # '0.0.0.0' binds the node to all available IP addresses of the machine, which is typically desired for ensuring the node is reachable on the network.
 berachain_p2p_external_address: '0.0.0.0' # external address advertised to peers for incoming connections. By default, if left empty (''), it uses berachain_p2p_listen_address. Set this variable if your node is behind a NAT, a VPN, or a proxy, and you need to advertise a different external address for peers to connect
