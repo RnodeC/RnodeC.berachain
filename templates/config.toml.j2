@@ -301,7 +301,7 @@ broadcast = true
 wal_dir = ""
 
 # Maximum number of transactions in the mempool
-size = 5000
+size = 250
 
 # Limit the total size of all txs in the mempool.
 # This only accounts for raw transactions (e.g. given 1MB transactions and
@@ -309,12 +309,12 @@ size = 5000
 max_txs_bytes = 1073741824
 
 # Size of the cache (used to filter transactions we saw earlier) in transactions
-cache_size = 10000
+cache_size = 500000 # OR 1000000, 2000000, 4000000 (as high as possible as your memory configuration allows - higher is better)
 
 # Do not remove invalid transactions from the cache (default: false)
 # Set to true if it's not possible for any invalid transaction to become valid
 # again in the future.
-keep-invalid-txs-in-cache = false
+keep-invalid-txs-in-cache = true
 
 # Maximum size of a single transaction.
 # NOTE: the max size of a tx transmitted over the network is {max_tx_bytes}.
@@ -324,6 +324,7 @@ max_tx_bytes = 1048576
 # Including space needed by encoding (one varint per transaction).
 # XXX: Unused due to https://github.com/tendermint/tendermint/issues/5796
 max_batch_bytes = 0
+
 
 #######################################################
 ###         State Sync Configuration Options        ###

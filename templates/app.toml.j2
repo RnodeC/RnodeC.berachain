@@ -354,7 +354,7 @@ etherbase = "0xAf15f95bed0D3913a29092Fd7837451Ce4de64D3"
 extra-data = "0x"
 
 # Gas price for transactions included in blocks
-gas-price = "1000000000"
+gas-price = 1
 
 # Minimum gas limit for transactions included in blocks
 gas-floor = "0"
@@ -394,7 +394,6 @@ ignore-price = "2"
 
 # LegacyTxPool settings
 [polaris.polar.legacy-tx-pool]
-
 # Addresses that should be treated by default as local
 locals = []
 
@@ -408,7 +407,7 @@ journal = ""
 rejournal = "1h0m0s"
 
 # Minimum gas price to enforce for acceptance into the pool
-price-limit = "1"
+price-limit = 10000000000000
 
 # Minimum price bump percentage to replace an already existing transaction (nonce)
 price-bump = "10"
@@ -426,7 +425,7 @@ global-slots = "5120"
 global-queue = "1024"
 
 # Maximum amount of time non-executable transaction are queued
-lifetime = "3h0m0s"
+lifetime = 5m0s
 
 
 # Node-specific settings
