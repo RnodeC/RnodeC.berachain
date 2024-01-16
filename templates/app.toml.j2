@@ -261,6 +261,8 @@ max-txs = 5000
 [polaris]
 
 [polaris.polar]
+force-tx-removal=false
+
 # Gas cap for RPC requests
 rpc-gas-cap = "50000000"
 
@@ -354,7 +356,7 @@ etherbase = "0xAf15f95bed0D3913a29092Fd7837451Ce4de64D3"
 extra-data = "0x"
 
 # Gas price for transactions included in blocks
-gas-price = 1
+gas-price = "1"
 
 # Minimum gas limit for transactions included in blocks
 gas-floor = "0"
@@ -398,7 +400,7 @@ ignore-price = "2"
 locals = []
 
 # Whether local transaction handling should be disabled
-no-locals = false
+no-locals = true
 
 # Journal of local transactions to survive node restarts
 journal = ""
@@ -407,7 +409,7 @@ journal = ""
 rejournal = "1h0m0s"
 
 # Minimum gas price to enforce for acceptance into the pool
-price-limit = 10000000000000
+price-limit = "100000000"
 
 # Minimum price bump percentage to replace an already existing transaction (nonce)
 price-bump = "10"
@@ -476,7 +478,8 @@ http-cors = ["*"]
 http-virtual-hosts = ["*"]
 
 # Enabled modules for HTTP
-http-modules = ["net", "web3", "eth", "web3", "net", "txpool", "debug"]
+http-modules = ["net", "web3", "eth", "web3"]
+# http-modules = ["net", "web3", "eth", "web3", "txpool", "debug"]
 
 # Path prefix for HTTP
 http-path-prefix = ""

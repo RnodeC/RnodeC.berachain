@@ -9,7 +9,7 @@ berachain_bin_url: ''
 berachain_keyring_backend: file
 berachain_pruning_mode: default # default|everything|nothing
 berachain_seeds: '' # comma separated list of seed nodes to connect to
-berachain_min_gas_prices: '0b/0x5806E416dA447b267cEA759358cF22Cc41FAE80F'
+berachain_min_gas_prices: '10000000abgt'
 berachain_db_backend: goleveldb
 berachain_telemetry_enabled: false
 berachain_prometheus_enabled: true

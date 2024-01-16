@@ -279,7 +279,6 @@ dial_timeout = "3s"
 ###          Mempool Configuration Option          ###
 #######################################################
 [mempool]
-
 # Recheck (default: true) defines whether CometBFT should recheck the
 # validity for all remaining transaction in the mempool after a block.
 # Since a block affects the application state, some transactions in the
@@ -301,7 +300,7 @@ broadcast = true
 wal_dir = ""
 
 # Maximum number of transactions in the mempool
-size = 250
+size = 10000
 
 # Limit the total size of all txs in the mempool.
 # This only accounts for raw transactions (e.g. given 1MB transactions and
@@ -309,7 +308,7 @@ size = 250
 max_txs_bytes = 1073741824
 
 # Size of the cache (used to filter transactions we saw earlier) in transactions
-cache_size = 500000 # OR 1000000, 2000000, 4000000 (as high as possible as your memory configuration allows - higher is better)
+cache_size = 250000
 
 # Do not remove invalid transactions from the cache (default: false)
 # Set to true if it's not possible for any invalid transaction to become valid
