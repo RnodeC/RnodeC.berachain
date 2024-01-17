@@ -16,3 +16,10 @@
     group: "{{ berachain_group_name }}"
     mode: '0755'
   become: true
+
+- command: "{{ berachain_bin_dir }}/berad version"
+  register: berad_version
+
+- name: Log berad version
+  debug:
+    msg: "berad version is: {{ berad_version.stdout }}"
