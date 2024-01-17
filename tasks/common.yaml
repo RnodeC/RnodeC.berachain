@@ -13,7 +13,7 @@
   - lsof
   - tmux
 
-- name: Add bera user
+- name: "Add bera user - {{ berachain_user_name }}"
   user:
     name: "{{ berachain_user_name }}"
     uid: "{{ berachain_user_id }}"
@@ -21,5 +21,5 @@
     shell: /bin/false
   become: true
   when: not berachain_user_name == 'root'
-  
+
 - meta: flush_handlers
