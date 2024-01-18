@@ -7,7 +7,9 @@ berachain_chain_id: ''
 berachain_genesis_url: ''
 berachain_bin_url: ''
 berachain_keyring_backend: file
-berachain_pruning_mode: default # default|everything|nothing
+berachain_pruning_mode: default # default|everything|nothing|custom
+berachain_pruning_keep_recent: 256
+berachain_pruning_interval: 16
 berachain_seeds: '' # comma separated list of seed nodes to connect to
 berachain_min_gas_prices: '10000000abgt'
 berachain_db_backend: goleveldb
@@ -34,8 +36,8 @@ berachain_pex_enabled: true
 berachain_rpc_listen_address: '127.0.0.1' # defaults to '0.0.0.0' when berachain_role is rpc, localhost otherwise
 berachain_rpc_port: 26657
 berachain_rpc_cors_allowed_origins: '[]' # defaults to '[*]' when berachain_role is rpc
-berachain_max_inbound_peers: 10
-berachain_max_outbound_peers: 15
+berachain_max_inbound_peers: 15
+berachain_max_outbound_peers: 20
 berachain_api_server_enabled: false # defaults to true when berachain_role is rpc
 berachain_api_listen_address: '127.0.0.1'
 berachain_api_port: 1317
