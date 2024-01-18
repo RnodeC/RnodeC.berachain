@@ -2,17 +2,40 @@
 - name: Restart berad service
   systemd:
     name: berad
-    state: restarted
+    state: started
     enabled: true
     daemon_reload: true
   become: true
 
-- name: If not a validator, ensure priv_validator_key and state do not exist
-  when: (berachain_role != 'validator')
-  become: true
-  file:
+- name: Wait for berachain_p2p_port to be open
+  wait_for:
+    port: "{{ berachain_p2p_port }}"
+    delay: 5 # Wait 5 seconds before starting to check
+    timeout: 30 # Wait up to 30 seconds for the port to be open
+  become: false
+
+- name: Wait for berachain_rpc_port to be open
+  wait_for:
+    port: "{{ berachain_rpc_port }}"
+    delay: 5 # Wait 5 seconds before starting to check
+    timeout: 30 # Wait up to 30 seconds for the port to be open
+  become: false
+
+- name: Check if files exist
+  stat:
     path: "{{ item }}"
-    state: absent
+  when: berachain_role != 'validator'
+  register: file_stat
   with_items:
     - "{{ berachain_home_dir }}/config/priv_validator_key.json"
     - "{{ berachain_home_dir }}/data/priv_validator_state.json"
+
+- name: Remove files if they exist
+  file:
+    path: "{{ item.item }}"
+    state: absent
+  when:
+    - item.stat.exists
+    - berachain_role != 'validator'
+  with_items: "{{ file_stat.results }}"
+  become: true
