@@ -1,7 +1,6 @@
 ---
-- name: OS specific config
+- name: Update os (only if "--tags os-update" was applied)
   include_tasks: "{{ ansible_os_family | lower }}.yaml"
-  tags: os
 
 - include_tasks: common.yaml
 

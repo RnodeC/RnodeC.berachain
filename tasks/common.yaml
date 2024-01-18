@@ -12,6 +12,12 @@
   - sysstat
   - lsof
   - tmux
+  
+- name: Check if user {{ berachain_user_name }} exists
+  getent:
+    database: passwd
+    key: "{{ berachain_user_name }}"
+  register: user_check
 
 - name: "Add bera user - {{ berachain_user_name }}"
   user:
@@ -20,6 +26,8 @@
     system: true
     shell: /bin/false
   become: true
-  when: not berachain_user_name == 'root'
+  when:
+    - not berachain_user_name == 'root'
+    - not user_check.ansible_facts.getent_passwd.{{ berachain_user_name }}
 
 - meta: flush_handlers
