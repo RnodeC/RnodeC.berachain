@@ -2,7 +2,7 @@
 - name: Restart berad service
   systemd:
     name: berad
-    state: started
+    state: restarted
     enabled: true
     daemon_reload: true
   become: true
@@ -37,5 +37,7 @@
   when:
     - item.stat.exists
     - berachain_role != 'validator'
-  with_items: "{{ file_stat.results }}"
+  loop: "{{ file_stat.results }}"
+  loop_control:
+    label: "{{ item.item }}"  # This will display only the file path in the output
   become: true
