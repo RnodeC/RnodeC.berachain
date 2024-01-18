@@ -17,8 +17,10 @@
     mode: '0755'
   become: true
 
-- command: "{{ berachain_bin_dir }}/berad version"
+- name: Get berad version
+  command: "{{ berachain_bin_dir }}/berad version"
   register: berad_version
+  changed_when: false
 
 - name: Log berad version
   debug:

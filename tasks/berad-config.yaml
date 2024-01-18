@@ -38,8 +38,8 @@
     - berachain_keys_mnemonic is defined
     - berachain_keys_mnemonic | length > 0
     - require_init
-  - debug:
-      var: berad_init_output
+  #- debug:
+  #    var: berad_init_output
 
   - name: Otherwise, init regularly
     command: >
@@ -50,8 +50,8 @@
     when:
     - berachain_keys_mnemonic is not defined or berachain_keys_mnemonic | length == 0
     - require_init
-  - debug:
-      var: berad_init_output
+  #- debug:
+  #    var: berad_init_output
 
   - name: Stage config.toml
     template:
