@@ -20,6 +20,8 @@ berachain_dogstatsd_addr: ''
 berachain_p2p_listen_address: '0.0.0.0' # '0.0.0.0' binds the node to all available IP addresses of the machine, which is typically desired for ensuring the node is reachable on the network.
 berachain_p2p_external_address: '0.0.0.0' # external address advertised to peers for incoming connections. By default, if left empty (''), it uses berachain_p2p_listen_address. Set this variable if your node is behind a NAT, a VPN, or a proxy, and you need to advertise a different external address for peers to connect
 berachain_p2p_port: 26656
+berachain_max_inbound_peers: 40
+berachain_max_outbound_peers: 20
 berachain_seed_mode_enabled: false
 berachain_state_sync_enabled: false
 berachain_state_sync_rpc_servers: '' # comma separated list of trusted rpc servers to use for sync
@@ -36,8 +38,6 @@ berachain_pex_enabled: true
 berachain_rpc_listen_address: '127.0.0.1' # defaults to '0.0.0.0' when berachain_role is rpc, localhost otherwise
 berachain_rpc_port: 26657
 berachain_rpc_cors_allowed_origins: '[]' # defaults to '[*]' when berachain_role is rpc
-berachain_max_inbound_peers: 15
-berachain_max_outbound_peers: 20
 berachain_api_server_enabled: false # defaults to true when berachain_role is rpc
 berachain_api_listen_address: '127.0.0.1'
 berachain_api_port: 1317
